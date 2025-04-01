@@ -33,7 +33,7 @@ empty_lines:
 naming:
 
   variables: camelCase
-    
+
   constants: UPPER_CASE
 
   methods: camelCase
