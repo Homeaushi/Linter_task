@@ -1,0 +1,117 @@
+public class HighComplexityExample {
+
+    public void processUserData(User user, boolean isAdmin, int retryCount, DataValidator validator) {
+        // 1. Первое условие
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        // 2. Второе условие
+        if (user.getAge() < 18) {
+            System.out.println("User is underage");
+            return;
+        }
+
+        // 3. Третье условие
+        if (user.getAge() > 65) {
+            System.out.println("User is retired");
+            if (isAdmin) {
+                System.out.println("Admin override enabled");
+            }
+        }
+
+        // 4. Четвертое условие (вложенное)
+        if (validator != null) {
+            // 5. Пятое условие
+            if (!validator.validateEmail(user.getEmail())) {
+                System.out.println("Invalid email format");
+                // 6. Шестое условие
+                if (retryCount > 0) {
+                    System.out.println("Retrying validation...");
+                    retryCount--;
+                    validator.validateEmailWithRetry(user.getEmail(), retryCount);
+                }
+            }
+        }
+
+        // 7. Седьмое условие (switch-case)
+        switch (user.getStatus()) {
+            case "ACTIVE":
+                // 8. Восьмое условие (внутри case)
+                if (user.getLastLogin() > 30) {
+                    System.out.println("User inactive for too long");
+                }
+                break;
+            case "PENDING":
+                System.out.println("User pending approval");
+                break;
+            case "BANNED":
+                // 9. Девятое условие
+                if (isAdmin) {
+                    System.out.println("Admin viewing banned user");
+                }
+                break;
+            default:
+                System.out.println("Unknown status");
+        }
+
+        // 10. Десятое условие (цикл с условием внутри)
+        for (int i = 0; i < user.getPermissions().size(); i++) {
+            String permission = user.getPermissions().get(i);
+            // 11. Одиннадцатое условие
+            if (permission.startsWith("WRITE_")) {
+                // 12. Двенадцатое условие
+                if (!isAdmin) {
+                    System.out.println("Warning: Non-admin with write permission");
+                }
+            }
+        }
+
+        // 13. Тринадцатое условие (try-catch с условием)
+        try {
+            user.save();
+        } catch (DatabaseException e) {
+            // 14. Четырнадцатое условие
+            if (e.getErrorCode() == 1062) {
+                System.out.println("Duplicate entry");
+            } else if (e.getErrorCode() == 1045) {
+                System.out.println("Access denied");
+            } else {
+                System.out.println("Unknown database error");
+            }
+        }
+
+        // 15. Пятнадцатое условие (тернарный оператор)
+        String accessLevel = isAdmin ? "ADMIN" : user.hasPremium() ? "PREMIUM" : "BASIC";
+        System.out.println("Access level: " + accessLevel);
+    }
+}
+
+// Вспомогательные классы
+class User {
+    private String email;
+    private int age;
+    private String status;
+    private long lastLogin;
+    private List<String> permissions;
+    private boolean hasPremium;
+
+    // Геттеры и сеттеры
+    public String getEmail() { return email; }
+    public int getAge() { return age; }
+    public String getStatus() { return status; }
+    public long getLastLogin() { return lastLogin; }
+    public List<String> getPermissions() { return permissions; }
+    public boolean hasPremium() { return hasPremium; }
+    public void save() throws DatabaseException { /* реализация */ }
+}
+
+class DataValidator {
+    public boolean validateEmail(String email) { /* реализация */ return false; }
+    public void validateEmailWithRetry(String email, int retryCount) { /* реализация */ }
+}
+
+class DatabaseException extends Exception {
+    private int errorCode;
+    public int getErrorCode() { return errorCode; }
+}

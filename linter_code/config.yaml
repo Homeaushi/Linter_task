@@ -9,3 +9,8 @@ naming:
   methods: camelCase
   classes: PascalCase
 max_consecutive_empty_lines: 2
+usage:
+  unused_vars: true
+  unused_methods: true
+complexity:
+  max_complexity: 9

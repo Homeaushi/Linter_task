@@ -1,6 +1,7 @@
 import pytest
 
-from Linter import Config, Linter
+from config import Config
+from linter import Linter
 
 
 @pytest.fixture
@@ -18,6 +19,11 @@ naming:
   methods: camelCase
   classes: PascalCase
 max_consecutive_empty_lines: 2
+usage:
+  unused_vars: true
+  unused_methods: true
+complexity:
+  max_complexity: 9
     """
     config_file_1.write_text(text_1)
     config_1 = Config.from_yaml(str(tmp_path / "config_without_changing.yaml"))
@@ -39,6 +45,11 @@ naming:
   methods: camelCase
   classes: PascalCase
 max_consecutive_empty_lines: 3
+usage:
+  unused_vars: true
+  unused_methods: false
+complexity:
+  max_complexity: 9
     """
     config_file_2.write_text(text_2)
     config_2 = Config.from_yaml(str(tmp_path / "config_with_changing.yaml"))
@@ -61,7 +72,7 @@ public class Calculator {
         return this.Result;
     }
 
-    public int ADD(int a, int b) {
+    public int add(int a, int b) {
         return a + b;
     }
 
@@ -188,12 +199,14 @@ def test_config_without_changing(base_config_file):
     assert base_config_file.naming.classes == "PascalCase"
     assert base_config_file.spacing.around_operators is True
     assert base_config_file.max_consecutive_empty_lines == 2
+    assert base_config_file.usage.unused_methods is True
 
 
 def test_config_with_changing(changed_config_file):
     assert changed_config_file.spacing.max_row == 3
     assert changed_config_file.spacing.around_keywords is False
     assert changed_config_file.max_consecutive_empty_lines == 3
+    assert changed_config_file.usage.unused_methods is False
 
 
 def test_linting_correct_java_file(correct_linter_without_errors):
