@@ -99,7 +99,7 @@ class Linter:
             self.__find_errors(constants_reg, CheckName.CONSTANTS)
 
         if self.__config.naming.methods == State.CAMEL_CASE.value:
-            methods_reg = r"[a-z]+_[a-z]+\(|\d+[a-zA-Z]+\(|_[a-z]+\(|[A-Z][a-z]+[A-Z][a-z]+\(|[A-Z]+\(.*\)"
+            methods_reg = r"!\w+([a-z]+_[a-z]+\(|\d+[a-zA-Z]+\(|_[a-z]+\(|[A-Z][a-z]+[A-Z][a-z]+\(|[A-Z]+\(.*\))"
             self.__find_errors(methods_reg, CheckName.METHODS)
 
         if self.__config.naming.classes == State.PASCAL_CASE.value:
